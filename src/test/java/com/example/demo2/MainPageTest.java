@@ -1,9 +1,8 @@
 package com.example.demo2;
 
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,6 +13,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MainPageTest {
     private WebDriver driver;
@@ -46,9 +47,14 @@ public class MainPageTest {
         // Setting explicit waiting
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
         // Waiting until our element could be clicked
-        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("h2 > a[href]")));
-        // Getting list of elements with the <cite> tag
-        List<WebElement> results = driver.findElements(By.cssSelector("cite"));
+        wait.until(ExpectedConditions.and(
+                ExpectedConditions.textToBePresentInElementLocated(By.cssSelector(":not(.b_adurl) > cite"), "selenium"),
+                ExpectedConditions.elementToBeClickable(By.cssSelector(":not(.b_adurl) > cite"))
+        ));
+        // We need to find non-advertisement elements with <cite> children in them
+        List<WebElement> results = wait.until(ExpectedConditions.visibilityOfAllElements(
+                driver.findElements(By.cssSelector(":not(.b_adurl) > cite"))
+        ));
         // Clicking the first element of a list
         clickElement(results, 0);
         // After click we should get the right webpage
@@ -59,6 +65,6 @@ public class MainPageTest {
         // Clicking the element with defined id
         results.get(id).click();
         // First element in a list would have id equals 0
-        System.out.println("Clicking link number " + (id+1) + " - " + driver.getCurrentUrl());
+        System.out.println("Clicking link number " + (id + 1) + " - " + driver.getCurrentUrl());
     }
 }
