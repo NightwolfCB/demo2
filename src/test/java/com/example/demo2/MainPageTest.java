@@ -28,7 +28,6 @@ public class MainPageTest {
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get("https://www.bing.com/");
-
     }
 
     @AfterEach
@@ -58,7 +57,7 @@ public class MainPageTest {
         // Clicking the first element of a list
         clickElement(results, 0);
         // After click we should get the right webpage
-        assertEquals("https://www.selenium.dev/", driver.getCurrentUrl());
+        assertEquals("https://www.selenium.dev/", driver.getCurrentUrl(), "Correct link follow failed!");
     }
 
     public void clickElement(List<WebElement> results, int id) {
