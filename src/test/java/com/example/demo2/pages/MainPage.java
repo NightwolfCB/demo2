@@ -11,13 +11,13 @@ public class MainPage {
     @FindBy(css = "#sb_form_q")
     private WebElement searchField;
 
+    public MainPage(WebDriver driver) {
+        PageFactory.initElements(driver, this);
+    }
+
     public void sendText(String text) {
         searchField.sendKeys(text);
         searchField.submit();
         System.out.println("Text inputted: " + text);
-    }
-
-    public MainPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
     }
 }

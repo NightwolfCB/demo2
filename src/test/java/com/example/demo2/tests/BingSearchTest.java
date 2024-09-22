@@ -5,6 +5,7 @@ import com.example.demo2.pages.ResultsPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -21,6 +22,7 @@ public class BingSearchTest {
         ChromeOptions options = new ChromeOptions();
         // Fix the issue https://github.com/SeleniumHQ/selenium/issues/11750
         options.addArguments("--remote-allow-origins=*");
+        options.setPageLoadStrategy(PageLoadStrategy.EAGER);
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -39,6 +41,7 @@ public class BingSearchTest {
         mp.sendText(input);
         ResultsPage rp = new ResultsPage(driver);
         rp.clickElement(0);
+        rp.switchTab();
         assertEquals("https://www.selenium.dev/", driver.getCurrentUrl(), "Correct link follow failed!");
     }
 
