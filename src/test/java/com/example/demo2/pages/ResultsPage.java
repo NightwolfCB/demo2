@@ -36,7 +36,10 @@ public class ResultsPage {
 
     public void clickElement(int id) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
-        wait.until(ExpectedConditions.elementToBeClickable(nonAdv));
+        wait.until(ExpectedConditions.and(
+                ExpectedConditions.textToBePresentInElement(nonAdv, "selenium"),
+                ExpectedConditions.elementToBeClickable(nonAdv)
+        ));
         results.get(id).click();
         // First element in a list would have id equals 0
         System.out.println("Clicking link number " + (id + 1));
