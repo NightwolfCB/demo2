@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResultsPage {
-    private WebDriver driver;
+    final WebDriver driver;
 
     @FindBy(css = "#sb_form_q")
     private WebElement searchField;
@@ -20,7 +20,8 @@ public class ResultsPage {
     @FindBy(css = ":not(.b_adurl) > cite")
     private WebElement nonAdv;
 
-    @FindBy(css = "cite")
+    // same locator in order to get more stability
+    @FindBy(css = ":not(.b_adurl) > cite")
     private List<WebElement> results;
 
     public ResultsPage(WebDriver driver) {
@@ -28,6 +29,7 @@ public class ResultsPage {
         PageFactory.initElements(driver, this);
     }
 
+    // with all tests running simultaneously new tabs creating
     public void switchTab() {
         ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
         if (tabs.size() > 1)
@@ -36,12 +38,13 @@ public class ResultsPage {
 
     public void clickElement(int id) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
+        // additional check for correct text presented in element
         wait.until(ExpectedConditions.and(
                 ExpectedConditions.textToBePresentInElement(nonAdv, "selenium"),
                 ExpectedConditions.elementToBeClickable(nonAdv)
         ));
         results.get(id).click();
-        // First element in a list would have id equals 0
+        // first element in a list would have id equals 0
         System.out.println("Clicking link number " + (id + 1));
     }
 

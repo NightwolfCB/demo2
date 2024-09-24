@@ -15,6 +15,8 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BingSearchTest {
+    MainPage mp;
+    ResultsPage rp;
     private WebDriver driver;
 
     @BeforeEach
@@ -27,6 +29,8 @@ public class BingSearchTest {
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get("https://www.bing.com/");
+        mp = new MainPage(driver);
+        rp = new ResultsPage(driver);
     }
 
     @AfterEach
@@ -37,9 +41,7 @@ public class BingSearchTest {
     @Test
     public void searchResultsTest() {
         String input = "Selenium";
-        MainPage mp = new MainPage(driver);
         mp.sendText(input);
-        ResultsPage rp = new ResultsPage(driver);
         rp.clickElement(0);
         rp.switchTab();
         assertEquals("https://www.selenium.dev/", driver.getCurrentUrl(), "Correct link follow failed!");
@@ -48,9 +50,7 @@ public class BingSearchTest {
     @Test
     public void searchFieldTest() {
         String input = "Selenium";
-        MainPage mp = new MainPage(driver);
         mp.sendText(input);
-        ResultsPage rp = new ResultsPage(driver);
         assertEquals(input, rp.getTextFromSearchField(), "Text didn't match!");
     }
 }
